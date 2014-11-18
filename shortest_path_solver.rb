@@ -6,10 +6,10 @@
 
 require 'priority_queue'
 
-class SPS
+module SPS
 
-  def initialize(filepath=nil)
-    #raise ArgumentError, "No file given" if filepath == nil
+  def path_solver(filepath=nil)
+    raise ArgumentError, "No file given" if filepath == nil
     output = ""
     count = 0
     request = true
@@ -17,7 +17,7 @@ class SPS
     @remaining_array = []
     @vertices = {}
 
-    File.open("/home/wolph/projects/shortest-path-server/data/map1.bin", 'rb') do |file|
+    File.open(filepath, 'rb') do |file|
       until file.eof?
         if request
           s = file.read(2)
@@ -38,7 +38,9 @@ class SPS
     get_vertices
     shortest_path = dijkstra(@request_array[0], @request_array[1])
     if shortest_path == nil
-      puts "No path from #{@request_array[0]} to #{@request_array[1]}"
+      out = "No path from #{@request_array[0]} to #{@request_array[1]}"
+      puts out
+      return out
     else
       shortest_path.unshift(@request_array[1])
       shortest_path.push(@request_array[0])
@@ -49,7 +51,9 @@ class SPS
           output = output + "->#{shortest_path.pop}"
         end
       end
-      puts "#{output} (#{@weight})"
+      out = "#{output} (#{@weight})"
+      puts out
+      return out
     end
   end
 
