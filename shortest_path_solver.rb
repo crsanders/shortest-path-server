@@ -6,8 +6,10 @@
 
 require 'priority_queue'
 
+#This was originally a class but is easier to work with as a module
 module SPS
 
+  #path_solver is the meat of this project, accepting the input, running the algorithm, and giving the output
   def path_solver(filepath=nil)
     raise ArgumentError, "No file given" if filepath == nil
     output = ""
@@ -19,9 +21,12 @@ module SPS
 
     File.open(filepath, 'rb') do |file|
       until file.eof?
+        #First we get our initial edge, our destination edge, and the number of edges
         if request
+          #by reading in 2 bytes at a time we are able to use string.unpack to get an easier to use value
           s = file.read(2)
           value = s.unpack('v')
+          #however, string.unpack returns an array, which we don't want.  This gets us just the value
           value = value[0]
           @request_array.push(value)
           count += 1
@@ -37,11 +42,13 @@ module SPS
 
     get_vertices
     shortest_path = dijkstra(@request_array[0], @request_array[1])
+
     if shortest_path == nil
       out = "No path from #{@request_array[0]} to #{@request_array[1]}"
       puts out
       return out
     else
+      #Here we massage the output to the format that we want
       shortest_path.unshift(@request_array[1])
       shortest_path.push(@request_array[0])
       while shortest_path.size != 0
@@ -57,6 +64,7 @@ module SPS
     end
   end
 
+  #get_vertices populates the vertices array, giving us each edge, it's neighbors, and the cost of traveling to each neighbor
   def get_vertices
     count = 1
     x = 0
@@ -67,6 +75,8 @@ module SPS
       edge = @remaining_array[x+1]
       weight = @remaining_array[x+2]
       edges[edge] = weight
+      #this checks to see if the next vertex is actually the same vertex that we are already on, but with a different
+      #neighbor.  If it is, we'll continue to populate the current vertex rather than generate a new one
       while @remaining_array[x+3] == vertex_name
         x += 3
         edge = @remaining_array[x+1]
@@ -84,6 +94,7 @@ module SPS
     @vertices[name] = edges
   end
 
+  #an implementation of the dijkstra algorithm to get shortest and most cost-effective path
   def dijkstra(start_node, end_node)
     infinity = Float::INFINITY
     @weight = infinity
@@ -93,6 +104,7 @@ module SPS
     previous = {}
     to_search = PriorityQueue.new
 
+    #run over the initial vertices to populate our initial arrays
     @vertices.each do |vertex, value|
       if vertex == start_node
         distance[vertex] = 0
@@ -105,12 +117,16 @@ module SPS
       previous[vertex] = nil
     end
 
+    #as long as we have edges to check, we'll check each edge
     while to_search.size != 0
       to_test = to_search.shift
 
+      #if we somehow get a nil value or if we come across an edge with an infinite distance to
+      #the source, we stop searching as we have run out of edges to check
       break if to_test == nil
       break if distance[to_test] == infinity
 
+      #here we calculate all of the possibilities as well as their costs at each node
       @vertices[to_test].each do |neighbor, value|
         alt = distance[to_test] + @vertices[to_test][neighbor]
         distance[neighbor] = 0 if distance[neighbor] == nil
@@ -120,6 +136,9 @@ module SPS
           to_search[alt] << neighbor
         end
 
+        #here we check if we have a path to the exit edge.  If we do, we check to make sure that
+        #we don't already have a faster/more cost-effective way of getting there.  If we don't,
+        #the newly discovered route becomes the best path
         if neighbor == end_node and alt < @weight
           @path = []
           while previous[to_test]
@@ -130,6 +149,7 @@ module SPS
         end
       end
     end
+    #If we are unable to locate a path to the exit node we return nil
     return nil if @path.size == 0
     return @path
   end

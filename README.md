@@ -34,14 +34,35 @@ Instructions
 Solution Notes
 --------------
 
-*Add solution notes here*
+The given solution is implemented in Ruby.
+The first thing I set out to do was to get the input data into a format that was both
+human-readable as well as machine-usable.  This proved to be more difficult than
+expected, but by reading in the input 2 bytes at a time and converting it to integers
+I was able to solve the problem.  Once I had a usable input the next step was to
+implement Dijkstra's Algorithm.  I chose this algorithm based on its ability to quickly
+traverse a graph and determine the most cost-effective way to get from point A to point
+B.  Since I knew the number of edges I used this information to build out the vertices
+array.  I made sure that my implementation checked for the shortest path as soon as it found
+the end node in an attempt to expedite the process.  Once I had the shortest path I
+messaged the output to fit the required format.  Finally, I used the Ruby Socket class
+to allow for the listening and receiving of the input on port 7777.
 
 
 Build Instructions
 ------------------
 
-*Add build instructions here*
+1. Clone this git repository.
+2. Download the "priority_queue" ruby gem (gem install priority_queue)
+3. Run "shortest_path_server"
+4. In a seperate shell, navigate to the "data" directory
+5. Run the command in the "Testing Instructions" section of this README
 
+Bonus
+-----
+
+In the "Testing Instructions" section of this README, it may be helpful
+to make note of the fact that the command will only run if you are 
+currently in the "data" directory.
 
 Requirements
 ------------
