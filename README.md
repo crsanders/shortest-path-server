@@ -152,7 +152,7 @@ License
 
 This file is part of Shortest-Path-Server.
 
-Copyright (c) __current-year__ __your-name-here__
+Copyright (c) __2014__ __Christian Sanders__
 
 Shortest-Path-Server is free software: you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the Free
