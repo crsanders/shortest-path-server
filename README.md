@@ -52,10 +52,11 @@ Build Instructions
 ------------------
 
 1. Clone this git repository.
-2. Download the "priority_queue" ruby gem (gem install priority_queue)
-3. Run "shortest_path_server"
-4. In a seperate shell, navigate to the "data" directory
-5. Run the command in the "Testing Instructions" section of this README
+2. Ensure that you have Ruby 1.9x installed (apt-get install ruby)
+3. Download the "priority_queue" ruby gem (gem install priority_queue)
+4. Run "shortest_path_server" (ruby shortest_path_server)
+5. In a seperate shell, navigate to the "data" directory
+6. Run the command in the "Testing Instructions" section of this README
 
 Bonus
 -----
